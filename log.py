@@ -1,7 +1,7 @@
 import      json
 import      hashlib
 from        os          import      listdir
-from        os.path     import      isfile, join, getsize
+from        os.path     import      isfile, join, getsize, exists
 
 class File:
     def __init__(self,name,hash,size):
@@ -20,10 +20,13 @@ class File:
         return hash_func.hexdigest()
     
 def load_logged_files() -> list:
+    if not exists('db.json'):
+        with open('db.json', 'w') as db:
+            json.dump([], db)
     try:
         with open('db.json', 'r') as db:
             return json.load(db)
-    except FileNotFoundError:
+    except:
         return []
 
 def save_data_to_json(db_file, data):
